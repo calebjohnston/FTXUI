@@ -22,7 +22,7 @@ int main(int argc, const char* argv[]) {
   };
 
   auto menu_option = MenuOption();
-  menu_option.on_enter = screen.ExitLoopClosure();
+  menu_option.on_select = screen.ExitLoopClosure();
 
   int left_menu_selected = 0;
   int right_menu_selected = 0;

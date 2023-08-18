@@ -231,6 +231,58 @@ TEST(MenuTest, AnimationsVertical) {
   }
 }
 
+TEST(MenuTest, Observers) {
+  std::vector<std::string> entries = {"1", "2", "3"};
+  int selected = 0;
+  int focused = 0;
+  int select_counter = 0;
+  int change_counter = 0;
+
+  MenuOption option = MenuOption::Vertical();
+  option.on_change = [&]{ change_counter++; };
+  option.on_select = [&]{ select_counter++; };
+  option.focused_entry = &focused;
+
+  auto menu = Menu(&entries, &selected, &option);
+
+  EXPECT_TRUE(menu->OnEvent(Event::ArrowDown));  // [0] -> [1]
+  EXPECT_EQ(change_counter, 1);
+  EXPECT_EQ(select_counter, 0);
+  EXPECT_TRUE(menu->OnEvent(Event::Return));
+  EXPECT_EQ(select_counter, 1);
+  EXPECT_EQ(selected, 1);
+
+  EXPECT_TRUE(menu->OnEvent(Event::ArrowDown));  // [1] -> [2]
+  EXPECT_EQ(change_counter, 2);
+  EXPECT_EQ(select_counter, 1);
+  EXPECT_TRUE(menu->OnEvent(Event::Return));
+  EXPECT_EQ(select_counter, 2);
+  EXPECT_EQ(selected, 2);
+
+  EXPECT_TRUE(menu->OnEvent(Event::ArrowUp));  // [2] -> [1]
+  EXPECT_EQ(change_counter, 3);
+  EXPECT_TRUE(menu->OnEvent(Event::ArrowUp));  // [1] -> [0]
+  EXPECT_EQ(change_counter, 4);
+  EXPECT_FALSE(menu->OnEvent(Event::ArrowUp)); // [0] -> [0]
+  EXPECT_EQ(change_counter, 4);
+  EXPECT_TRUE(menu->OnEvent(Event::Return));
+  EXPECT_EQ(select_counter, 3);
+  EXPECT_EQ(selected, 0);
+
+  Mouse mouse;
+  mouse.button = Mouse::Button::Left;
+  mouse.motion = Mouse::Motion::Released;
+  mouse.shift = false;
+  mouse.meta = false;
+  mouse.control = false;
+  mouse.x = mouse.y = 10;
+  EXPECT_FALSE(menu->OnEvent(Event::Mouse("", mouse)));  // Errant click
+  mouse.x = mouse.y = 0;
+  EXPECT_TRUE(menu->OnEvent(Event::Mouse("", mouse)));  // Clicked first item
+  EXPECT_EQ(select_counter, 4);
+  EXPECT_EQ(selected, 0);
+}
+
 }  // namespace ftxui
 
 // Copyright 2022 Arthur Sonzogni. All rights reserved.

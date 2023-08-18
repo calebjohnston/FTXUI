@@ -113,13 +113,13 @@ TEST(ToggleTest, OnChange) {
   EXPECT_EQ(counter, 4);
 }
 
-TEST(ToggleTest, OnEnter) {
+TEST(ToggleTest, OnSelect) {
   std::vector<std::string> entries = {"1", "2", "3"};
   int selected = 0;
   int counter = 0;
 
   auto option = MenuOption::Toggle();
-  option.on_enter = [&] { counter++; };
+  option.on_select = [&] { counter++; };
   auto toggle = Menu(&entries, &selected, &option);
 
   EXPECT_FALSE(toggle->OnEvent(Event::ArrowLeft));  // Reached far left.

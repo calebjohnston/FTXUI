@@ -95,8 +95,7 @@ struct MenuOption {
 
   // Observers:
   std::function<void()> on_change;  ///> Called when the selected entry changes.
-  std::function<void()> on_enter;   ///> Called when the user presses enter.
-  std::function<void()> on_click;   ///> Called when the user clicks an item
+  std::function<void()> on_select;   ///> Called when the user selects an item
   Ref<int> focused_entry = 0;
 };
 

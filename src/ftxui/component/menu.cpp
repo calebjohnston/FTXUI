@@ -77,14 +77,14 @@ class MenuBase : public ComponentBase {
   }
 
   void OnEnter() {
-    if (option_->on_enter) {
-      option_->on_enter();
+    if (option_->on_select) {
+      option_->on_select();
     }
   }
 
   void OnClick() {
-    if (option_->on_click) {
-      option_->on_click();
+    if (option_->on_select) {
+      option_->on_select();
     }
   }
 

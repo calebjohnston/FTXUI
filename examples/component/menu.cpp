@@ -20,7 +20,7 @@ int main(int argc, const char* argv[]) {
   int selected = 0;
 
   MenuOption option;
-  option.on_enter = screen.ExitLoopClosure();
+  option.on_select = screen.ExitLoopClosure();
   auto menu = Menu(&entries, &selected, &option);
 
   screen.Loop(menu);
