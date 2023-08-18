@@ -82,6 +82,12 @@ class MenuBase : public ComponentBase {
     }
   }
 
+  void OnClick() {
+    if (option_->on_click) {
+      option_->on_click();
+    }
+  }
+
   void Clamp() {
     if (*selected_ != selected_previous_) {
       SelectedTakeFocus();
@@ -321,6 +327,7 @@ class MenuBase : public ComponentBase {
           selected_previous_ = *selected_;
           OnChange();
         }
+		OnClick();
         return true;
       }
     }
